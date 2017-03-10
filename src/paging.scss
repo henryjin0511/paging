@@ -1,0 +1,84 @@
+.paging-box{
+    .paging-item,.paging-first,.paging-last,.paging-prev,.paging-next{
+        display: inline-block;
+        position: relative;
+        margin-left: -1px;
+        width: 35px;
+        height: 35px;
+        border: solid 1px #ededed;
+        color: #3e3e3e;
+        text-align: center;
+        line-height: 35px;
+        cursor: pointer;
+        text-decoration: none;
+        -webkit-transition: color,background-color,border-color .1s linear;
+        -moz-transition: color,background-color,border-color .1s linear;
+        -o-transition: color,background-color,border-color .1s linear;
+        transition: color,background-color,border-color .1s linear;
+        &:hover{
+            z-index: 1;
+            color: #ff5357;
+            border-color: #ff5357;
+        }
+    }
+    .paging-item.paging-curr{
+        position: relative;
+        z-index: 1;
+        background: #ff5357;
+        color: #fff;
+        border-color: #ff5357;
+        cursor: default;
+        text-decoration: none;
+    }
+    .paging-dot{
+        display: inline-block;
+        margin: 0 5px;
+    }
+    .paging-prev,.paging-next{
+        margin: 0 5px;
+        width: 80px;
+        &.paging-disabled{
+            color: #ccc;
+            border-color: #ededed;
+        }
+    }
+    .paging-total{
+        margin-left: 10px;
+        color: #3e3e3e;
+    }
+    .paging-skip{
+        margin-left: 10px;
+        display: inline-block;
+        line-height: 35px;
+        color: #3e3e3e;
+        input{
+            margin: 0 5px;
+            width: 35px;
+            border: solid 1px #ededed;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+        }
+        button{
+            margin-left: 10px;
+            width: 60px;
+            height: 28px;
+            border: solid 1px #ededed;
+            text-align: center;
+            line-height: 28px;
+            cursor: pointer;
+            text-decoration: none;
+            -webkit-transition: all .1s linear;
+            -moz-transition: all .1s linear;
+            -o-transition: all .1s linear;
+            transition: all .1s linear;
+            background: #fff;
+            &:hover{
+                z-index: 1;
+                color: #f40;
+                border-color: #f40;
+            }
+        }
+    }
+
+}

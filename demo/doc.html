@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>paging example</title>
+	<link rel="stylesheet" href="bootstrap.min.css" />
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="./html5shiv.min.js"></script>
+	<script src="./respond.min.js"></script>
+	<![endif]-->
+</head>
+<body style="padding-top: 60px;">
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container">
+		<div class="navbar-header"><a class="navbar-brand" href="./index.html">Paging</a></div>
+		<ul class="nav navbar-nav">
+			<li><a href="./index.html">INTRODUCE</a></li>
+			<li class="active"><a href="javascript:;">DOC/API</a></li>
+			<li><a href="javascript:;">GITHUB</a></li>
+		</ul>
+	</div>
+</nav>
+<div class="container">
+	<div class="page-header">
+		<h1>Paging API</h1>
+	</div>
+	<h3>如何使用/How to use</h3>
+	<br />
+	<pre>var paging1 = paging(options);</pre>
+	* 如果不需要使用外部方法，可以不需要var
+	<hr />
+	<br />
+	<h2>参数/options</h2>
+	<pre>var paging1 = paging(options);</pre>
+	<br />
+	<table class="table table-bordered table-striped">
+		<thead>
+		<tr>
+			<td>Name</td>
+			<td>Type</td>
+			<td>Default</td>
+			<td>Description</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>cont</td>
+			<td>String|Object</td>
+			<td>'pagination'</td>
+			<td>用来储存分页DOM元素，支持传入ID名称或者原生DOM对象</td>
+		</tr>
+		<tr>
+			<td>pages</td>
+			<td>Number</td>
+			<td>1</td>
+			<td>分页总数</td>
+		</tr>
+		<tr>
+			<td>curr</td>
+			<td>Number</td>
+			<td>1</td>
+			<td>当前页码</td>
+		</tr>
+		<tr>
+			<td>groups</td>
+			<td>Number</td>
+			<td>5</td>
+			<td>显示连续分页数量</td>
+		</tr>
+		<tr>
+			<td>first</td>
+			<td>String|Number|Boolean</td>
+			<td>1</td>
+			<td>首页显示内容，默认为1，传入false时不显示</td>
+		</tr>
+		<tr>
+			<td>last</td>
+			<td>String|Number|Boolean</td>
+			<td>默认为pages的值</td>
+			<td>尾页显示内容，默认等于总页数，传入false时不显示</td>
+		</tr>
+		<tr>
+			<td>prev</td>
+			<td>String</td>
+			<td>'上一页'</td>
+			<td>上一页按钮显示内容</td>
+		</tr>
+		<tr>
+			<td>next</td>
+			<td>String</td>
+			<td>'下一页'</td>
+			<td>下一页按钮显示内容</td>
+		</tr>
+		<tr>
+			<td>total</td>
+			<td>Boolean</td>
+			<td>false</td>
+			<td>是否显示总页数，默认不显示</td>
+		</tr>
+		<tr>
+			<td>skip</td>
+			<td>Boolean</td>
+			<td>false</td>
+			<td>是否开启跳页，默认不开启</td>
+		</tr>
+		<tr>
+			<td>reset</td>
+			<td>Boolean</td>
+			<td>false</td>
+			<td>第一次加载是否触发跳页事件，默认为false</td>
+		</tr>
+		</tbody>
+	</table>
+	<br />
+	<h2>事件/Events</h2>
+	<pre class="prettyprint">paging({pageChange:function(){});</pre>
+	<br />
+	<table class="table table-bordered table-striped">
+		<thead>
+		<tr>
+			<td>Name</td>
+			<td>Signature</td>
+			<td>Description</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>pageChange</td>
+			<td>function(){//this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表}</td>
+			<td>当参数选项中reset设置为true，第一次构建分页元素就会触发分页事件</td>
+		</tr>
+		<tr>
+			<td>overPageSkip</td>
+			<td>function(){//this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表}</td>
+			<td>当skip事件触发或是内部跳页input输入时，页码数超出总页数时触发</td>
+		</tr>
+		</tbody>
+	</table>
+	<br />
+	<h2>方法/Methods</h2>
+	<pre class="prettyprint">var paging1 = paging();paging1.prev();//上一页</pre>
+	<br />
+	<h4>.prev();</h4>
+	<pre class="prettyprint">paging1.prev();//上一页</pre>
+	<h4>.next();</h4>
+	<pre class="prettyprint">paging1.next();//下一页</pre>
+	<h4>.skip(num);</h4>
+	<pre class="prettyprint">paging1.skip(5);//跳至第五页</pre>
+	<br />
+	<br />
+	<br />
+	<br />
+</div>
+<script>
+</script>
+</body>
+</html>
