@@ -2,7 +2,7 @@
   "name": "paging",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "gulpfile.js",
   "scripts": {
     "dev": "gulp dev",
     "build": "gulp build"
