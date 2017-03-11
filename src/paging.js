@@ -17,8 +17,8 @@
 			total: false,
 			skip: false,
 			reset: false,
-			pageChange: function () {},
-			overPageSkip:function () {}
+			pageChange: function (opts) {},
+			overPageSkip:function (tpage) {}
 		};
 		//简单深度拷贝
 		var deepcopy = function deepcopy(target, origin) {
@@ -48,15 +48,9 @@
 	//初始化
 	Paging.prototype.init = function (reset) {
 	    var _this = this,opts = _this.opts;
-	    opts.pages = opts.pages | 0;
-	    opts.curr = opts.curr | 0;
-	    opts.groups = opts.groups | 0;
-	    if(opts.curr === 0 || opts.pages <= 1){
-            return false;
-        }else if(opts.pages > 0 && opts.curr > opts.pages){
-            opts.overPageSkip.call(_this);
-            return false;
-        }
+	    opts.pages = ((opts.pages | 0)<=0)?1:(opts.pages | 0);
+	    opts.curr = ((opts.curr | 0)<=0)?1:(opts.curr | 0);
+	    opts.groups = ((opts.groups | 0)<=0)?5:(opts.groups | 0);
         _this.render();
         _this.bindEvents(document.getElementById('paging' + opts.item));
 		if(typeof reset === 'undefined' || reset === true){
@@ -71,14 +65,14 @@
 			view = [],
 			sign = {},
 			pages = opts.pages | 0,
-			curr = opts.curr | 0 || 1,
-			groups = 'groups' in opts ? opts.groups | 0 : 5,
-			first = 'first' in opts ? opts.first : 1,
-			last = 'last' in opts ? opts.last : '&#x5C3E;&#x9875;',
-			prev = 'prev' in opts ? opts.prev : '&#x4E0A;&#x4E00;&#x9875;',
-			next = 'next' in opts ? opts.next : '&#x4E0B;&#x4E00;&#x9875;',
-			total = 'total' in opts ? opts.total : false,
-			skip = 'skip' in opts ? opts.skip : false;
+			curr = opts.curr | 0 ,
+			groups = opts.groups | 0,
+			first = opts.first,
+			last = opts.last,
+			prev = opts.prev,
+			next = opts.next,
+			total = opts.total,
+			skip = opts.skip;
 		//是否显示上一页
 		if (prev && curr > 1) {
 			view.push('<a href="javascript:;" class="paging-prev" data-page="' + (curr - 1) + '">' + prev + '</a>');
@@ -131,35 +125,64 @@
 		var _this = this,
 			opts = _this.opts,
 			children = elem.children,
-			btn = elem.getElementsByTagName('button')[0],
-			input = elem.getElementsByTagName('input')[0];
+			tpage = 0,
+			skip = true,
+			oBtn = elem.getElementsByTagName('button')[0],
+			oInput = elem.getElementsByTagName('input')[0];
 		for (var i = 0, len = children.length; i < len; i++) {
 			if (children[i].nodeName.toLowerCase() === 'a') {
 				_this.on(children[i], 'click', function () {
-					opts.curr = this.getAttribute('data-page');
+					tpage = this.getAttribute('data-page') | 0;
+					if(tpage <= 0){
+						return false;
+					}
+					opts.curr = tpage;
 					_this.init();
 				});
 			}
 		}
-		if (btn) {
-			_this.on(btn, 'click', function () {
-                opts.curr = input.value.replace(/\s|\D/g, '') | 0;
-                _this.init();
+		if (oBtn) {
+			_this.on(oBtn, 'click', function () {
+				skip = true;
+				tpage = oInput.value.replace(/\s|\D/g, '') | 0;
+				if(tpage > opts.pages){
+					oInput.focus();
+					skip = opts.overPageSkip.call(_this,tpage);
+				}
+				if(!skip){
+					return false;
+				}
+				opts.curr = tpage;
+				_this.init();
 			});
 		}
 	};
 	Paging.prototype.skip = function (tpage) {
-		var _this = this,opts = _this.opts,curr = tpage;
+		var _this = this,opts = _this.opts,skip = true;
+		if(isNaN(tpage) || tpage > opts.pages){
+			skip = opts.overPageSkip.call(_this,tpage);
+		}
+		if(!skip){
+			return false;
+		}
         opts.curr = tpage;
         _this.init();
 	};
 	Paging.prototype.prev = function () {
 		var _this = this,opts = _this.opts;
+		if(opts.curr <= 1){
+			opts.curr = 1;
+			return false;
+		}
 		opts.curr--;
 		_this.init();
 	};
 	Paging.prototype.next = function () {
 		var _this = this,opts = _this.opts;
+		if(opts.curr >= opts.pages){
+			opts.curr = opts.pages;
+			return false;
+		}
 		opts.curr++;
 		_this.init();
 	};

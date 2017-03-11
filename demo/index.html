@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>paging example</title>
+	<title>Paging Example</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- paging javascript and css -->
 	<script src="../src/paging.js"></script>
@@ -151,7 +151,7 @@ var paging6 = paging({
 		document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr;
 	},
 	overPageSkip:function (curr) {
-		alert('最大页数为'+this.opts.pages+'，您选择的是'+this.opts.curr+'/r/n'+'total page is'+this.opts.pages+', you target is '+this.opts.curr+' .');
+		alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'/r/n'+'total page is'+this.opts.pages+', you target is '+tpage+' .');
 	}
 });
 document.getElementById('pagination6-next').onclick = function () {
@@ -190,7 +190,7 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			cont:'pagination1',
 			pages:12,
 			groups:5,
-			curr:6
+			curr:1
 		});
 		paging({
 			cont:'pagination2',
@@ -228,14 +228,16 @@ document.getElementById('pagination6-skip15').onclick = function () {
 		var paging6 = paging({
 			cont:'pagination6',
 			pages:12,
-			groups:3,
+			groups:5,
 			curr:6,
 			reset:true,
+			total:true,
+			skip:true,
 			pageChange:function(){
 				document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr + ' - Current page is '+this.opts.curr;
 			},
-			overPageSkip:function (curr) {
-				alert('最大页数为'+this.opts.pages+'，您选择的是'+this.opts.curr+'。\n'+'total page is'+this.opts.pages+', your target is '+this.opts.curr+' .');
+			overPageSkip:function (tpage) {
+				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
 			}
 		});
 		document.getElementById('pagination6-next').onclick = function () {

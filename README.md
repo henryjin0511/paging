@@ -55,8 +55,8 @@ paging({
 * **`overPageSkip`** : 跳页或输入大于分页数时跳页触发事件
 ```javascript
 paging({
-    overPageSkip:function() {
-        //console.log(this);此时this为当前pageing对象，通过this.opts可以拿到当前分页对象参数
+    overPageSkip:function(tpage) {
+        //console.log(this);此时this为当前pageing对象，通过this.opts可以拿到当前分页对象参数，tpage为目标页码
     }
 });
 ```
