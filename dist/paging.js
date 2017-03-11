@@ -17,8 +17,8 @@
 			total: false,
 			skip: false,
 			reset: false,
-			pageChange: function (opts) {},
-			overPageSkip:function (tpage) {}
+			pageChange: function () {},
+			overPageSkip:function () {}
 		};
 		//简单深度拷贝
 		var deepcopy = function deepcopy(target, origin) {
