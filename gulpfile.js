@@ -33,7 +33,7 @@ gulp.task('css',['scss'],function () {
 			keepSpecialComments: '*',
             format:{
                 breaks: {
-                    afterRuleEnds: true // controls if a line break comes after a rule ends; defaults to `false`
+                    afterRuleEnds: true
                 }
 			}
 		}))
