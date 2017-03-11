@@ -3,14 +3,13 @@
 <head>
 	<meta charset="utf-8" />
 	<title>paging example</title>
-	<link rel="stylesheet" href="../src/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!-- paging javascript and css -->
 	<script src="../src/paging.js"></script>
 	<link rel="stylesheet" href="../src/paging.css" />
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
-	<script src="../src/html5shiv.min.js"></script>
-	<script src="../src/respond.min.js"></script>
+	<script src=https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js></script>
+	<script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script>
 	<![endif]-->
 	<style type="text/css">
 		#pagination1{
@@ -29,6 +28,11 @@
 			text-align: center;
 			font-size: 16px;
 		}
+		#pagination6-methods{
+			text-align: center;
+			margin: 10px auto;
+			font-size: 14px;
+		}
 	</style>
 </head>
 <body style="padding-top: 60px;">
@@ -38,42 +42,44 @@
 		<ul class="nav navbar-nav">
 			<li class="active"><a href="javascript:;">INTRODUCE</a></li>
 			<li><a href="./doc.html">DOC/API</a></li>
-			<li><a href="javascript:;">GITHUB</a></li>
+			<li><a href="https://github.com/jinming6568/paging">GITHUB</a></li>
 		</ul>
 	</div>
 </nav>
 <div class="container">
 	<div class="page-header">
-		<h1>Paging 原生javascript分页插件</h1>
+		<h1>Paging</h1>
+		<br />
+		<h4>一款基于原生javascript开发的多功能分页插件 / A simple plugin for list paging based on javascript . <a href="https://jinming6568.github.io/paging/release/paging.zip">下载 / Download</a></h4>
 	</div>
-	<h2>加载项</h2>
+	<h3>开始使用 / Getting started</h3>
 	<br />
 	<pre class="prettyprint">
 &lt;script type="text/javascript" src="/dist/paging.js"&gt;&lt;/script&gt;
 &lt;link rel="stylesheet" type="text/css" href="/dist/paging.css" /&gt;</pre>
-	* 实际运用中建议css自定义
+	* 推荐自定义css样式适配项目 / Custom stylesheet is recommended .
 	<hr />
-	<h2>默认</h2>
+	<h3>默认配置 / Default config</h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
-	pages:12,//总页数
-	groups:5,//居中显示数量
-	curr:6//当前页数
+paging({
+	cont:'pagination1',// id名或者直接传入原生dom对象/ word of div's id or DOM Object
+	pages:12,// 总页数/total pages number
+	groups:5,// 连续分页数/serial pages number
+	curr:6// 当前页数/current page number
 });</pre>
 	</div>
 	<br />
 	<div id="pagination1"></div>
 	<br />
 	<hr />
-	<h2>默认 增加总页数显示</h2>
+	<h3>增加总页数显示 / Add total page</h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
+paging({
+	cont:'pagination2',//id名或者直接传入原生dom对象
 	pages:12,
 	groups:5,
 	curr:6,
@@ -84,12 +90,12 @@ var paging1 = paging({
 	<div id="pagination2"></div>
 	<br />
 	<hr />
-	<h2>默认 增加跳页功能</h2>
+	<h3>增加跳页功能 / Add skip </h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
+paging({
+	cont:'pagination3',//id名或者直接传入原生dom对象
 	pages:12,
 	groups:5,
 	curr:6,
@@ -101,12 +107,12 @@ var paging1 = paging({
 	<div id="pagination3"></div>
 	<br />
 	<hr />
-	<h2>只含上下页，当前页</h2>
+	<h3>只含上下页，当前页 / Only remain prev page , next page and current page .</h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
+paging({
+	cont:'pagination4',//id名或者直接传入原生dom对象
 	pages:12,
 	groups:1,
 	curr:6
@@ -116,12 +122,12 @@ var paging1 = paging({
 	<div id="pagination4"></div>
 	<br />
 	<hr />
-	<h2>上下页</h2>
+	<h3>只含 / only remain prev page and next page .</h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
+paging({
+	cont:'pagination5',//id名或者直接传入原生dom对象
 	pages:12,
 	groups:false,
 	curr:6
@@ -131,24 +137,43 @@ var paging1 = paging({
 	<div id="pagination5"></div>
 	<br />
 	<hr />
-	<h2>回调及方法</h2>
+	<h3>回调及方法 / Callback and methods</h3>
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging1 = paging({
-	cont:'pagination1',//id名或者直接传入原生dom对象
+var paging6 = paging({
+	cont:'pagination6',
 	pages:12,
-	groups:false,
-	curr:6
-});</pre>
+	groups:3,
+	curr:6,
+	reset:true,
+	pageChange:function(){
+		document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr;
+	},
+	overPageSkip:function (curr) {
+		alert('最大页数为'+this.opts.pages+'，您选择的是'+this.opts.curr+'/r/n'+'total page is'+this.opts.pages+', you target is '+this.opts.curr+' .');
+	}
+});
+document.getElementById('pagination6-next').onclick = function () {
+	paging6.next();
+};
+document.getElementById('pagination6-prev').onclick = function () {
+	paging6.prev();
+};
+document.getElementById('pagination6-skip3').onclick = function () {
+	paging6.skip(3);
+};
+document.getElementById('pagination6-skip15').onclick = function () {
+	paging6.skip(15);
+};</pre>
 	</div>
 	<br />
 	<p id="pagination6-text"></p>
-	<p>
-		<a id="pagination6-prev" href="javascript:;">上一页</a>
-		<a id="pagination6-next" href="javascript:;">下一页</a>
-		<a id="pagination6-skip3" href="javascript:;">跳至第3页</a>
-		<a id="pagination6-skip15" href="javascript:;">跳至第15页</a>
+	<p id="pagination6-methods">
+		<a id="pagination6-prev" href="javascript:;">上一页 / Prev page</a><br />
+		<a id="pagination6-next" href="javascript:;">下一页 / Next page</a><br />
+		<a id="pagination6-skip3" href="javascript:;">跳至第3页 / Skip to fifth</a><br />
+		<a id="pagination6-skip15" href="javascript:;">跳至第15页 / Skip to fifteenth</a><br />
 	</p>
 	<div id="pagination6"></div>
 	<br />
@@ -161,20 +186,20 @@ var paging1 = paging({
 		window.onload = domCallback;
 	}
 	function domCallback() {
-		var paging1 = paging({
+		paging({
 			cont:'pagination1',
 			pages:12,
 			groups:5,
 			curr:6
 		});
-		var paging2 = paging({
+		paging({
 			cont:'pagination2',
 			pages:12,
 			groups:5,
 			curr:6,
 			total:true
 		});
-		var paging3 = paging({
+		paging({
 			cont:'pagination3',
 			pages:12,
 			groups:5,
@@ -184,7 +209,7 @@ var paging1 = paging({
 			total:true,
 			skip:true
 		});
-		var paging4 = paging({
+		paging({
 			cont:'pagination4',
 			pages:12,
 			groups:1,
@@ -192,7 +217,7 @@ var paging1 = paging({
 			last:false,
 			curr:6
 		});
-		var paging5 = paging({
+		paging({
 			cont:'pagination5',
 			pages:12,
 			groups:false,
@@ -207,10 +232,10 @@ var paging1 = paging({
 			curr:6,
 			reset:true,
 			pageChange:function(){
-				document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr;
+				document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr + ' - Current page is '+this.opts.curr;
 			},
 			overPageSkip:function (curr) {
-				alert('最大页数为'+this.opts.pages+'，您选择的是'+this.opts.curr);
+				alert('最大页数为'+this.opts.pages+'，您选择的是'+this.opts.curr+'。\n'+'total page is'+this.opts.pages+', your target is '+this.opts.curr+' .');
 			}
 		});
 		document.getElementById('pagination6-next').onclick = function () {

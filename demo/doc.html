@@ -3,11 +3,10 @@
 <head>
 	<meta charset="utf-8" />
 	<title>paging example</title>
-	<link rel="stylesheet" href="bootstrap.min.css" />
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<!--[if lt IE 9]>
-	<script src="./html5shiv.min.js"></script>
-	<script src="./respond.min.js"></script>
+	<script src=https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js></script>
+	<script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script>
 	<![endif]-->
 </head>
 <body style="padding-top: 60px;">
@@ -17,7 +16,7 @@
 		<ul class="nav navbar-nav">
 			<li><a href="./index.html">INTRODUCE</a></li>
 			<li class="active"><a href="javascript:;">DOC/API</a></li>
-			<li><a href="javascript:;">GITHUB</a></li>
+			<li><a href="https://github.com/jinming6568/paging">GITHUB</a></li>
 		</ul>
 	</div>
 </nav>
@@ -25,13 +24,13 @@
 	<div class="page-header">
 		<h1>Paging API</h1>
 	</div>
-	<h3>如何使用/How to use</h3>
+	<h3>如何使用 / How to use</h3>
 	<br />
 	<pre>var paging1 = paging(options);</pre>
-	* 如果不需要使用外部方法，可以不需要var
+	* 如果不使用外部方法，可以不需要var / You don't always need to add 'var xxx = ...' unless you would use the methods
 	<hr />
 	<br />
-	<h2>参数/options</h2>
+	<h2>参数 / Options</h2>
 	<pre>var paging1 = paging(options);</pre>
 	<br />
 	<table class="table table-bordered table-striped">
@@ -48,105 +47,119 @@
 			<td>cont</td>
 			<td>String|Object</td>
 			<td>'pagination'</td>
-			<td>用来储存分页DOM元素，支持传入ID名称或者原生DOM对象</td>
+			<td>用来储存分页DOM元素，支持传入ID名称或者原生DOM对象 / Div for the paging DOM element;</td>
 		</tr>
 		<tr>
 			<td>pages</td>
 			<td>Number</td>
 			<td>1</td>
-			<td>分页总数</td>
+			<td>分页总数 / Total pages number</td>
 		</tr>
 		<tr>
 			<td>curr</td>
 			<td>Number</td>
 			<td>1</td>
-			<td>当前页码</td>
+			<td>当前页码 / Current page number</td>
 		</tr>
 		<tr>
 			<td>groups</td>
 			<td>Number</td>
 			<td>5</td>
-			<td>显示连续分页数量</td>
+			<td>显示连续分页数量 / Serial pages number</td>
 		</tr>
 		<tr>
 			<td>first</td>
 			<td>String|Number|Boolean</td>
 			<td>1</td>
-			<td>首页显示内容，默认为1，传入false时不显示</td>
+			<td>首页按钮显示内容，默认为1，传入false时不显示 / First page button's content . It would hide when the value is false .</td>
 		</tr>
 		<tr>
 			<td>last</td>
 			<td>String|Number|Boolean</td>
 			<td>默认为pages的值</td>
-			<td>尾页显示内容，默认等于总页数，传入false时不显示</td>
+			<td>尾页显示内容，默认等于总页数，传入false时不显示 / Last page button's content . It would hide when the value is false .</td>
 		</tr>
 		<tr>
 			<td>prev</td>
 			<td>String</td>
 			<td>'上一页'</td>
-			<td>上一页按钮显示内容</td>
+			<td>上一页按钮显示内容 / Prev page button's content . It would hide when the value is false .</td>
 		</tr>
 		<tr>
 			<td>next</td>
 			<td>String</td>
 			<td>'下一页'</td>
-			<td>下一页按钮显示内容</td>
+			<td>下一页按钮显示内容 / Next page button's content . It would hide when the value is false .</td>
 		</tr>
 		<tr>
 			<td>total</td>
 			<td>Boolean</td>
 			<td>false</td>
-			<td>是否显示总页数，默认不显示</td>
+			<td>是否显示总页数，默认不显示 / Show the total pages number or not .</td>
 		</tr>
 		<tr>
 			<td>skip</td>
 			<td>Boolean</td>
 			<td>false</td>
-			<td>是否开启跳页，默认不开启</td>
+			<td>是否开启跳页，默认不开启 / Switch to the method of skip .</td>
 		</tr>
 		<tr>
 			<td>reset</td>
 			<td>Boolean</td>
 			<td>false</td>
-			<td>第一次加载是否触发跳页事件，默认为false</td>
+			<td>第一次加载是否触发跳页事件，默认为false / Trigger the pageChange callback for the first time init paging or not .</td>
 		</tr>
 		</tbody>
 	</table>
 	<br />
-	<h2>事件/Events</h2>
+	<h2>事件 / Events</h2>
 	<pre class="prettyprint">paging({pageChange:function(){});</pre>
 	<br />
 	<table class="table table-bordered table-striped">
 		<thead>
 		<tr>
-			<td>Name</td>
-			<td>Signature</td>
-			<td>Description</td>
+			<td width="120">Name</td>
+			<td width="200">Signature</td>
+			<td width="200">Description</td>
 		</tr>
 		</thead>
 		<tbody>
 		<tr>
 			<td>pageChange</td>
-			<td>function(){//this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表}</td>
-			<td>当参数选项中reset设置为true，第一次构建分页元素就会触发分页事件</td>
+			<td><pre>
+function(){
+	// this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表
+	// Object this is the current paging Object , you can get the options through this.opts .
+}
+			</pre>
+			</td>
+			<td>
+				当参数选项中reset设置为true，第一次构建分页元素就会触发分页事件
+				/ It would emit at the first time of paging init if the reset in options to set as true .
+			</td>
 		</tr>
 		<tr>
 			<td>overPageSkip</td>
-			<td>function(){//this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表}</td>
-			<td>当skip事件触发或是内部跳页input输入时，页码数超出总页数时触发</td>
+			<td><pre>
+function(){
+	// this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表
+	// Object this is the current paging Object , you can get the options through this.opts .
+}
+			</pre></td>
+			<td>当skip事件触发或是内部跳页input输入时，页码数超出总页数时触发 / Emit when you skip or input .</td>
 		</tr>
 		</tbody>
 	</table>
 	<br />
 	<h2>方法/Methods</h2>
-	<pre class="prettyprint">var paging1 = paging();paging1.prev();//上一页</pre>
+	<pre class="prettyprint">var paging1 = paging();paging1.prev();</pre>
 	<br />
 	<h4>.prev();</h4>
-	<pre class="prettyprint">paging1.prev();//上一页</pre>
+	<pre class="prettyprint">paging1.prev();// 上一页 / prev</pre>
 	<h4>.next();</h4>
-	<pre class="prettyprint">paging1.next();//下一页</pre>
+	<pre class="prettyprint">paging1.next();// 下一页 / next</pre>
 	<h4>.skip(num);</h4>
-	<pre class="prettyprint">paging1.skip(5);//跳至第五页</pre>
+	<pre class="prettyprint">paging1.skip(5);// 跳至第五页 / skip to fifth</pre>
 	<br />
 	<br />
 	<br />
