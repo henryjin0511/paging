@@ -50,7 +50,7 @@
 	    var _this = this,opts = _this.opts;
 	    opts.pages = ((opts.pages | 0)<=0)?1:(opts.pages | 0);
 	    opts.curr = ((opts.curr | 0)<=0)?1:(opts.curr | 0);
-	    opts.groups = ((opts.groups | 0)<=0)?5:(opts.groups | 0);
+	    opts.groups = ((opts.groups | 0)<0)?5:(opts.groups | 0);
         _this.render();
         _this.bindEvents(document.getElementById('paging' + opts.item));
 		if(typeof reset === 'undefined' || reset === true){
