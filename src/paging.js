@@ -20,34 +20,34 @@
 			pageChange: function (opts) {},
 			overPageSkip:function (tpage) {}
 		};
-		//简单深度拷贝
-		var deepcopy = function deepcopy(target, origin) {
-			target = target || {};
-			for (var i in origin) {
-				if (origin.hasOwnProperty(i)) {
-					if (typeof (origin[i]) === 'object') {
-						target[i] = origin[i].constructor === Array ? [] : {};
-						deepcopy(target[i], origin[i]);
-					} else {
-						target[i] = origin[i];
-					}
-				}
-			}
-			return target;
-		};
-		this.opts = deepcopy(defaultOpts, options);
+		this.opts = Paging.deepCopy(defaultOpts, options);
 		this.opts.item = index++; //单页面多次调用分ID
 		this.init(this.opts.reset);
 	}
+	Paging.deepCopy = function (target, origin) {
+		target = target || {};
+		for (var i in origin) {
+			if (origin.hasOwnProperty(i)) {
+				if (typeof (origin[i]) === 'object') {
+					target[i] = origin[i].constructor === Array ? [] : {};
+					Paging.deepCopy(target[i], origin[i]);
+				} else {
+					target[i] = origin[i];
+				}
+			}
+		}
+		return target;
+	};
 	//事件绑定
-	Paging.prototype.on = function (ele, even, fn) {
-		ele.attachEvent ? ele.attachEvent('on' + even, function () {
-				return fn.call(ele, window.event);
-			}) : ele.addEventListener(even, fn, false);
+	Paging.prototype.on = function (ele, tevent, handlr) {
+		document.addEventListener?ele.addEventListener(tevent,handlr,false):ele.attachEvent('on'+tevent,function () {
+			handlr.call(ele,window.event);
+		});
 	};
 	//初始化
 	Paging.prototype.init = function (reset) {
 	    var _this = this,opts = _this.opts;
+	    console.log(opts.item);
 	    opts.pages = ((opts.pages | 0)<=0)?1:(opts.pages | 0);
 	    opts.curr = ((opts.curr | 0)<=0)?1:(opts.curr | 0);
 	    opts.groups = ((opts.groups | 0)<0)?5:(opts.groups | 0);
@@ -120,19 +120,18 @@
         }
 	};
 	//事件绑定
-	Paging.prototype.bindEvents = function (elem) {
-		if (!elem) return;
+	Paging.prototype.bindEvents = function (oPaging) {console.log(oPaging);
+		if (!oPaging) return;
 		var _this = this,
 			opts = _this.opts,
-			children = elem.children,
-			tpage = 0,
-			skip = true,
-			oBtn = elem.getElementsByTagName('button')[0],
-			oInput = elem.getElementsByTagName('input')[0];
+			children = oPaging.children,
+			oBtn = oPaging.getElementsByTagName('button')[0],
+			oInput = oPaging.getElementsByTagName('input')[0];
+		//分页按钮事件
 		for (var i = 0, len = children.length; i < len; i++) {
 			if (children[i].nodeName.toLowerCase() === 'a') {
 				_this.on(children[i], 'click', function () {
-					tpage = this.getAttribute('data-page') | 0;
+					var tpage = this.getAttribute('data-page') | 0;
 					if(tpage <= 0){
 						return false;
 					}
@@ -141,15 +140,15 @@
 				});
 			}
 		}
-		if (oBtn) {
+		//跳页事件
+		if (opts.skip && oBtn) {
 			_this.on(oBtn, 'click', function () {
-				skip = true;
-				tpage = oInput.value.replace(/\s|\D/g, '') | 0;
+				var ableSkip = true,tpage = oInput.value.replace(/\s|\D/g, '') | 0;
 				if(tpage > opts.pages){
 					oInput.focus();
-					skip = opts.overPageSkip.call(_this,tpage);
+					ableSkip = opts.overPageSkip.call(_this,tpage);
 				}
-				if(!skip){
+				if(!ableSkip){
 					return false;
 				}
 				opts.curr = tpage;

@@ -1,5 +1,9 @@
 .paging-box{
-    .paging-item,.paging-first,.paging-last,.paging-prev,.paging-next{
+    .paging-item,
+    .paging-first,
+    .paging-last,
+    .paging-prev,
+    .paging-next{
         display: inline-block;
         position: relative;
         margin-left: -1px;
@@ -34,7 +38,8 @@
         display: inline-block;
         margin: 0 5px;
     }
-    .paging-prev,.paging-next{
+    .paging-prev,
+    .paging-next{
         margin: 0 5px;
         width: 80px;
         &.paging-disabled{
