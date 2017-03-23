@@ -3,7 +3,7 @@ var gulp = require('gulp'),
 	plugins = require('gulp-load-plugins')(),
 	del = require('del');
 	//路径
-var releasePath = 'release/',
+var releasePath = 'gh-pages/release/',
 	releaseSrc = 'dist/*.{css,js}',
 	resDest = 'dist/',
 	resSrc = 'src/',
