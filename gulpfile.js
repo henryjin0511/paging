@@ -12,8 +12,15 @@ var releasePath = 'gh-pages/release/',
 	scssSrc = 'src/paging.scss',
 	cssSrc = 'src/paging.css',
 	cssMinName = 'paging.min.css';
+gulp.task('jshint', function() {
+	return gulp.src(jsSrc)
+		.pipe(plugins.jshint())
+		.pipe(plugins.jshint.reporter('default'));
+});
 gulp.task('js',function () {
 	return gulp.src(jsSrc)
+		.pipe(plugins.jshint())
+		.pipe(plugins.jshint.reporter('default'))
 		.pipe(gulp.dest(resDest))
 		.pipe(plugins.rename(jsMinName))
 		.pipe(plugins.uglify())
@@ -21,6 +28,9 @@ gulp.task('js',function () {
 });
 gulp.task('scss',function () {
 	return gulp.src(scssSrc)
+		.pipe(plugins.scssLint({
+			'config': 'scsslint.yml'
+		}))
 		.pipe(plugins.sourcemaps.init())
 		.pipe(plugins.sass({outputStyle:'expanded'}).on('error', plugins.sass.logError))
 		.pipe(plugins.autoprefixer({
@@ -32,8 +42,7 @@ gulp.task('scss',function () {
 				'Explorer >= 8',
 				'iOS >= 6',
 				'Opera >= 12',
-				'Safari >= 6',
-				'IE 8'
+				'Safari >= 6'
 			],
 			cascade: true,
 			remove:true
@@ -58,7 +67,8 @@ gulp.task('css',['scss'],function () {
 		.pipe(gulp.dest(resDest));
 });
 gulp.task('dev', function() {
-	gulp.watch(scssSrc,['scss']);
+	//gulp.watch(scssSrc,['scss']);
+	gulp.watch(jsSrc,['jshint']);
 });
 gulp.task('deploy-html',function () {
 	return gulp.src('demo/*.html')
@@ -69,9 +79,9 @@ gulp.task('deploy-res',function () {
 	return gulp.src('dist/*')
 		.pipe(gulp.dest('gh-pages/src/'));
 });
-gulp.task('deploy-res',function () {
-	return gulp.src('dist/*')
-		.pipe(gulp.dest('gh-pages/src/'));
+gulp.task('deploy-rely',function () {
+	return gulp.src('rely/*')
+		.pipe(gulp.dest('gh-pages/rely/'));
 });
 gulp.task('release',['css','js'],function() {
 	return gulp.src(releaseSrc)
@@ -79,7 +89,7 @@ gulp.task('release',['css','js'],function() {
 		.pipe(gulp.dest(releasePath));
 });
 gulp.task('build',['css','js','release']);
-gulp.task('deploy',['deploy-html','deploy-res'],function () {
+gulp.task('deploy',['deploy-html','deploy-res','deploy-rely'],function () {
 	return gulp.src('./gh-pages/**/*')
 		.pipe(plugins.ghPages());
 });

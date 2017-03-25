@@ -2,14 +2,15 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging Example</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../rely/bootstrap.min.css">
 	<!-- paging javascript and css -->
 	<script src="src/paging.js"></script>
 	<link rel="stylesheet" href="src/paging.css" />
 	<!--[if lt IE 9]>
-	<script src=https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js></script>
-	<script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script>
+	<script src="../rely/html5shiv.min.js"></script>
+	<script src="../rely/respond.min.js"></script>
 	<![endif]-->
 	<style type="text/css">
 		#pagination1{
@@ -36,17 +37,17 @@
 	</style>
 </head>
 <body style="padding-top: 60px;">
-<nav class="navbar navbar-default navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header"><a class="navbar-brand" href="./">Paging</a></div>
-		<ul class="nav navbar-nav">
-			<li class="active"><a href="javascript:;">INTRODUCE</a></li>
-			<li><a href="./doc.html">DOC/API</a></li>
-			<li><a href="https://github.com/jinming6568/paging">GITHUB</a></li>
-		</ul>
-	</div>
-</nav>
 <div class="container">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+		<div class="navbar-header"><a class="navbar-brand" href="./">Paging</a></div>
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="javascript:;">INTRODUCE</a></li>
+				<li><a href="./doc.html">DOC/API</a></li>
+				<li><a href="https://github.com/jinming6568/paging">GITHUB</a></li>
+			</ul>
+		</div>
+	</nav>
 	<div class="page-header">
 		<h1>Paging</h1>
 		<br />
@@ -67,7 +68,10 @@ paging({
 	cont:'pagination1',// id名或者直接传入原生dom对象/ word of div's id or DOM Object
 	pages:12,// 总页数/total pages number
 	groups:5,// 连续分页数/serial pages number
-	curr:1// 当前页数/current page number
+	curr:1,// 当前页数/current page number
+	pageChange:function(opts){
+		alert(opts.curr);
+	}
 });</pre>
 	</div>
 	<br />
@@ -149,8 +153,8 @@ var paging6 = paging({
 	reset:true,
 	total:true,
 	skip:true,
-	pageChange:function(){
-		document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr + ' - Current page is '+this.opts.curr;
+	pageChange:function(opts){
+		document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
 	},
 	overPageSkip:function (tpage) {
 		alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
@@ -192,7 +196,10 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			cont:'pagination1',
 			pages:12,
 			groups:5,
-			curr:1
+			curr:1,
+			pageChange:function(opts){
+				alert(opts.curr);
+			}
 		});
 		paging({
 			cont:'pagination2',
@@ -235,8 +242,8 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			reset:true,
 			total:true,
 			skip:true,
-			pageChange:function(){
-				document.getElementById('pagination6-text').innerText = '当前页数为'+this.opts.curr + ' - Current page is '+this.opts.curr;
+			pageChange:function(opts){
+				document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
 			},
 			overPageSkip:function (tpage) {
 				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');

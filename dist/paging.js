@@ -1,3 +1,4 @@
+/* jshint expr: true */
 !function (window,undefined) {
 	"use strict";
 	function paging(options) {
@@ -24,6 +25,7 @@
 		this.opts.item = index++; //单页面多次调用分ID
 		this.init(this.opts.reset);
 	}
+	//静态方法 - 深度拷贝
 	Paging.deepCopy = function (target, origin) {
 		target = target || {};
 		for (var i in origin) {
@@ -38,35 +40,48 @@
 		}
 		return target;
 	};
-	//事件绑定
-	Paging.prototype.on = function (ele, tevent, handlr) {
-		document.addEventListener?ele.addEventListener(tevent,handlr,false):ele.attachEvent('on'+tevent,function () {
-			handlr.call(ele,window.event);
-		});
+	//静态方法 - 事件绑定
+	Paging.on = function (ele, tevent, handlr) {
+		document.addEventListener?ele.addEventListener(tevent,handlr,false):ele.attachEvent('on'+tevent,function () {handlr.call(ele,window.event);});
 	};
-	//初始化
+	//静态方法 - 兼容获取事件对象
+	Paging.getTarget = function (event) {
+		var e = event || window.event;
+		return e.target || e.srcElement;
+	};
+	//共有方法 - 初始化
 	Paging.prototype.init = function (reset) {
 	    var _this = this,opts = _this.opts;
-	    console.log(opts.item);
-	    opts.pages = ((opts.pages | 0)<=0)?1:(opts.pages | 0);
-	    opts.curr = ((opts.curr | 0)<=0)?1:(opts.curr | 0);
-	    opts.groups = ((opts.groups | 0)<0)?5:(opts.groups | 0);
-        _this.render();
-        _this.bindEvents(document.getElementById('paging' + opts.item));
-		if(typeof reset === 'undefined' || reset === true){
-			opts.pageChange && opts.pageChange.call(_this);
+	    if(typeof reset !== 'undefined'){
+		    _this.createDom();
+		    _this.bindEvents(document.getElementById('paging' + opts.item));
+	    }
+		_this.render();
+		if((typeof reset === 'undefined' || reset === true) && opts.pageChange){
+			opts.pageChange.call(_this,_this.opts);
 		}
 	};
-	//视图渲染
+	//共有方法 - 创建div
+	Paging.prototype.createDom = function () {
+		var _this = this , opts = _this.opts;
+		var htmlStr = '<div class="paging-box" id="paging'+opts.item+'"></div>';
+		if(typeof opts.cont === 'object'){
+			opts.cont.innerHTML = htmlStr;
+		}else{
+			document.getElementById(opts.cont).innerHTML = htmlStr;
+		}
+		_this.oDiv = document.getElementById('paging'+opts.item);
+	};
+	//共有方法 - 渲染分页dom
 	Paging.prototype.render = function () {
 		var _this = this,
 			htmlStr = '',
 			opts = _this.opts,
 			view = [],
 			sign = {},
-			pages = opts.pages | 0,
-			curr = opts.curr | 0 ,
-			groups = opts.groups | 0,
+			pages = ((opts.pages | 0)<=0)?1:(opts.pages | 0),
+			curr = ((opts.curr | 0)<=0)?1:(opts.curr | 0) ,
+			groups = ((opts.groups | 0)<0)?5:(opts.groups | 0),
 			first = opts.first,
 			last = opts.last,
 			prev = opts.prev,
@@ -112,38 +127,27 @@
 		if (skip) {
 			view.push('<div class="paging-skip"><span>&#x5230;&#x7B2C;</span><input type="number" min="1" value="' + curr + '" onkeyup="this.value=this.value.replace(/\\D/, \'\');"><span>&#x9875;</span><button type="button" class="paging-btn">&#x786e;&#x5b9a;</button></div>');
 		}
-        htmlStr =  '<div class="paging-box" id="paging' + _this.opts.item + '">' + view.join('') + '</div>';
-        if(typeof opts.cont === 'object'){
-            opts.cont['innerHTML'] = htmlStr;
-        }else{
-            document.getElementById(opts.cont).innerHTML = htmlStr;
-        }
+		_this.oDiv.innerHTML = view.join('');
 	};
-	//事件绑定
-	Paging.prototype.bindEvents = function (oPaging) {console.log(oPaging);
+	//共有方法 - 事件绑定
+	Paging.prototype.bindEvents = function (oPaging) {
 		if (!oPaging) return;
-		var _this = this,
-			opts = _this.opts,
-			children = oPaging.children,
-			oBtn = oPaging.getElementsByTagName('button')[0],
-			oInput = oPaging.getElementsByTagName('input')[0];
-		//分页按钮事件
-		for (var i = 0, len = children.length; i < len; i++) {
-			if (children[i].nodeName.toLowerCase() === 'a') {
-				_this.on(children[i], 'click', function () {
-					var tpage = this.getAttribute('data-page') | 0;
-					if(tpage <= 0){
-						return false;
-					}
-					opts.curr = tpage;
-					_this.init();
-				});
-			}
-		}
-		//跳页事件
-		if (opts.skip && oBtn) {
-			_this.on(oBtn, 'click', function () {
-				var ableSkip = true,tpage = oInput.value.replace(/\s|\D/g, '') | 0;
+		var _this = this, opts = _this.opts, oInput = null;
+		Paging.on(oPaging,'click',function(e){
+			var curObj = Paging.getTarget(e);
+			var tpage = 0;
+			var ableSkip = true;
+			if(curObj.nodeName.toLowerCase() === 'a'){  //分页按钮
+				tpage = curObj.getAttribute('data-page') | 0;
+				if(tpage <= 0){
+					return false;
+				}
+				opts.curr = tpage;
+				_this.init();
+			}else if(curObj.nodeName.toLowerCase() === 'button'){   //跳页
+				ableSkip = true;
+				oInput = oPaging.getElementsByTagName('input')[0];
+				tpage = oInput.value.replace(/\s|\D/g, '') | 0;
 				if(tpage > opts.pages){
 					oInput.focus();
 					ableSkip = opts.overPageSkip.call(_this,tpage);
@@ -153,9 +157,10 @@
 				}
 				opts.curr = tpage;
 				_this.init();
-			});
-		}
+			}
+		});
 	};
+	//共有方法 - 跳页
 	Paging.prototype.skip = function (tpage) {
 		var _this = this,opts = _this.opts,skip = true;
 		if(isNaN(tpage) || tpage > opts.pages){
@@ -167,6 +172,7 @@
         opts.curr = tpage;
         _this.init();
 	};
+	//共有方法 - 前一页
 	Paging.prototype.prev = function () {
 		var _this = this,opts = _this.opts;
 		if(opts.curr <= 1){
@@ -176,6 +182,7 @@
 		opts.curr--;
 		_this.init();
 	};
+	//共有方法 - 后一页
 	Paging.prototype.next = function () {
 		var _this = this,opts = _this.opts;
 		if(opts.curr >= opts.pages){

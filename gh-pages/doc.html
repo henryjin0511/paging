@@ -2,11 +2,12 @@
 <html>
 <head>
 	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging API</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../rely/bootstrap.min.css">
 	<!--[if lt IE 9]>
-	<script src=https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js></script>
-	<script src=https://oss.maxcdn.com/respond/1.4.2/respond.min.js></script>
+	<script src="../rely/html5shiv.min.js"></script>
+	<script src="../rely/respond.min.js"></script>
 	<![endif]-->
 </head>
 <body style="padding-top: 60px;">
@@ -113,7 +114,7 @@
 	</table>
 	<br />
 	<h2>事件 / Events</h2>
-	<pre class="prettyprint">paging({pageChange:function(){},overPageSkip:function(tpage){});</pre>
+	<pre class="prettyprint">paging({pageChange:function(opts){},overPageSkip:function(tpage){});</pre>
 	<br />
 	<table class="table table-bordered table-striped">
 		<thead>
@@ -128,12 +129,13 @@
 			<td>pageChange</td>
 			<td>
 				<pre>
-function(){
+function(opts){
 	console.log(this);
+	console.log(opts);
 }
 			</pre>
-				<p>this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表</p>
-				<p>Object this is the current paging Object , you can get the options through this.opts .</p>
+				<p>this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表 (opts === this.opts) </p>
+				<p>Object this is the current paging Object , you can get the options through this.opts . (opts === this.opts) </p>
 			</td>
 			<td>
 				当参数选项中reset设置为true，第一次构建分页元素就会触发分页事件 <br /> It would emit at the first time of paging init if the reset in options to set as true .
