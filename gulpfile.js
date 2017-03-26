@@ -79,9 +79,9 @@ gulp.task('deploy-res',function () {
 	return gulp.src('dist/*')
 		.pipe(gulp.dest('gh-pages/src/'));
 });
-gulp.task('deploy-rely',function () {
-	return gulp.src('rely/*')
-		.pipe(gulp.dest('gh-pages/rely/'));
+gulp.task('deploy-resource',function () {
+	return gulp.src('resource/*')
+		.pipe(gulp.dest('gh-pages/resource/'));
 });
 gulp.task('release',['css','js'],function() {
 	return gulp.src(releaseSrc)

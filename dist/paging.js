@@ -19,7 +19,7 @@
 			skip: false,
 			reset: false,
 			pageChange: function (opts) {},
-			overPageSkip:function (tpage) {}
+			overPageSkip:null
 		};
 		this.opts = Paging.deepCopy(defaultOpts, options);
 		this.opts.item = index++; //单页面多次调用分ID
@@ -134,9 +134,7 @@
 		if (!oPaging) return;
 		var _this = this, opts = _this.opts, oInput = null;
 		Paging.on(oPaging,'click',function(e){
-			var curObj = Paging.getTarget(e);
-			var tpage = 0;
-			var ableSkip = true;
+			var curObj = Paging.getTarget(e),tpage = 0,ableSkip = true;
 			if(curObj.nodeName.toLowerCase() === 'a'){  //分页按钮
 				tpage = curObj.getAttribute('data-page') | 0;
 				if(tpage <= 0){
@@ -162,15 +160,20 @@
 	};
 	//共有方法 - 跳页
 	Paging.prototype.skip = function (tpage) {
+	    if(isNaN(tpage)) throw new Error('Arguments[0] should be a Number');
 		var _this = this,opts = _this.opts,skip = true;
-		if(isNaN(tpage) || tpage > opts.pages){
-			skip = opts.overPageSkip.call(_this,tpage);
-		}
-		if(!skip){
-			return false;
-		}
-        opts.curr = tpage;
-        _this.init();
+        tpage = tpage | 0;
+		if(tpage <= opts.pages){
+            opts.curr = tpage;
+            _this.init();
+		}else{
+		    if(opts.overPageSkip){
+                opts.overPageSkip.call(_this,tpage);
+            }else{
+                opts.curr = opts.pages;
+                _this.init();
+            }
+        }
 	};
 	//共有方法 - 前一页
 	Paging.prototype.prev = function () {

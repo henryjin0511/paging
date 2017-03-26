@@ -4,13 +4,13 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging Example</title>
-	<link rel="stylesheet" href="../rely/bootstrap.min.css">
+	<link rel="stylesheet" href="../resource/bootstrap.min.css">
 	<!-- paging javascript and css -->
 	<script src="../src/paging.js"></script>
 	<link rel="stylesheet" href="../src/paging.css" />
 	<!--[if lt IE 9]>
-	<script src="../rely/html5shiv.min.js"></script>
-	<script src="../rely/respond.min.js"></script>
+	<script src="../resource/html5shiv.min.js"></script>
+	<script src="../resource/respond.min.js"></script>
 	<![endif]-->
 	<style type="text/css">
 		#pagination1{
@@ -197,8 +197,8 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			pages:12,
 			groups:5,
 			curr:1,
-			pageChange:function(opts){
-				alert(opts.curr);
+			pageChange:function(tpage){
+				alert(tpage);
 			}
 		});
 		paging({
@@ -242,8 +242,8 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			reset:true,
 			total:true,
 			skip:true,
-			pageChange:function(opts){
-				document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
+			pageChange:function(tpage){
+				document.getElementById('pagination6-text').innerText = '目标页码为' + tpage + '/' + this.opts.pages + ' - Target page is '+ tpage + '/' + this.opts.pages;
 			},
 			overPageSkip:function (tpage) {
 				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
