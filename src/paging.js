@@ -18,12 +18,18 @@
 			total: false,
 			skip: false,
 			reset: false,
-			pageChange: function (opts) {},
+			pageChange: null,
 			overPageSkip:null
 		};
 		this.opts = Paging.deepCopy(defaultOpts, options);
-		this.opts.item = index++; //单页面多次调用分ID
-		this.init(this.opts.reset);
+		this.oDiv = typeof this.opts.cont === 'object' ? this.opts.cont : document.getElementById(this.opts.cont);
+		if(this.oDiv.getAttribute('data-paging') !== 'paging'){
+			this.order = index++; //单页面多次调用分ID
+			this.oDiv.setAttribute('data-paging','paging');
+			this.init(this.opts.reset);
+		}else{
+			this.reinit();
+		}
 	}
 	//静态方法 - 深度拷贝
 	Paging.deepCopy = function (target, origin) {
@@ -52,25 +58,23 @@
 	//共有方法 - 初始化
 	Paging.prototype.init = function (reset) {
 	    var _this = this,opts = _this.opts;
-	    if(typeof reset !== 'undefined'){
-		    _this.createDom();
-		    _this.bindEvents(document.getElementById('paging' + opts.item));
-	    }
+	    _this.createDom();
+	    _this.bindEvents(_this.oPaging);
+		reset === true && opts.pageChange && opts.pageChange.call(_this,_this.opts.curr);
 		_this.render();
-		if((typeof reset === 'undefined' || reset === true) && opts.pageChange){
-			opts.pageChange.call(_this,_this.opts.curr);
-		}
+	};
+	//共有方法 - 切换页面初始化
+	Paging.prototype.reinit = function () {
+		var _this = this , opts = _this.opts;
+		if(_this.disabled === true)return false;
+		opts.pageChange && opts.pageChange.call(_this,_this.opts.curr);
+		_this.render();
 	};
 	//共有方法 - 创建div
 	Paging.prototype.createDom = function () {
-		var _this = this , opts = _this.opts;
-		var htmlStr = '<div class="paging-box" id="paging'+opts.item+'"></div>';
-		if(typeof opts.cont === 'object'){
-			opts.cont.innerHTML = htmlStr;
-		}else{
-			document.getElementById(opts.cont).innerHTML = htmlStr;
-		}
-		_this.oDiv = document.getElementById('paging'+opts.item);
+		var _this = this;
+		_this.oDiv.innerHTML = '<div class="paging-box" id="paging'+_this.order+'"></div>';
+		_this.oPaging = document.getElementById('paging'+_this.order);
 	};
 	//共有方法 - 渲染分页dom
 	Paging.prototype.render = function () {
@@ -127,7 +131,7 @@
 		if (skip) {
 			view.push('<div class="paging-skip"><span>&#x5230;&#x7B2C;</span><input type="number" min="1" value="' + curr + '" onkeyup="this.value=this.value.replace(/\\D/, \'\');"><span>&#x9875;</span><button type="button" class="paging-btn">&#x786e;&#x5b9a;</button></div>');
 		}
-		_this.oDiv.innerHTML = view.join('');
+		_this.oPaging.innerHTML = view.join('');
 	};
 	//共有方法 - 事件绑定
 	Paging.prototype.bindEvents = function (oPaging) {
@@ -141,7 +145,7 @@
 					return false;
 				}
 				opts.curr = tpage;
-				_this.init();
+				_this.reinit();
 			}else if(curObj.nodeName.toLowerCase() === 'button'){   //跳页
 				ableSkip = true;
 				oInput = oPaging.getElementsByTagName('input')[0];
@@ -154,24 +158,25 @@
 					return false;
 				}
 				opts.curr = tpage;
-				_this.init();
+				_this.reinit();
 			}
 		});
 	};
 	//共有方法 - 跳页
 	Paging.prototype.skip = function (tpage) {
 	    if(isNaN(tpage)) throw new Error('Arguments[0] should be a Number');
-		var _this = this,opts = _this.opts,skip = true;
+		var _this = this,opts = _this.opts;
         tpage = tpage | 0;
 		if(tpage <= opts.pages){
+			if(tpage === opts.curr)return false;
             opts.curr = tpage;
-            _this.init();
+            _this.reinit();
 		}else{
 		    if(opts.overPageSkip){
                 opts.overPageSkip.call(_this,tpage);
             }else{
                 opts.curr = opts.pages;
-                _this.init();
+                _this.reinit();
             }
         }
 	};
@@ -183,7 +188,7 @@
 			return false;
 		}
 		opts.curr--;
-		_this.init();
+		_this.reinit();
 	};
 	//共有方法 - 后一页
 	Paging.prototype.next = function () {
@@ -193,7 +198,7 @@
 			return false;
 		}
 		opts.curr++;
-		_this.init();
+		_this.reinit();
 	};
 	if ((typeof module === 'undefined' ? 'undefined' : typeof(module)) === "object" && module && typeof(module.exports) === "object") {
 		module.exports = paging;

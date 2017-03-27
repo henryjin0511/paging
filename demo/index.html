@@ -5,6 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging Example</title>
 	<link rel="stylesheet" href="../resource/bootstrap.min.css">
+	<script src="../resource/ajax.js"></script>
 	<!-- paging javascript and css -->
 	<script src="../src/paging.js"></script>
 	<link rel="stylesheet" href="../src/paging.css" />
@@ -23,6 +24,9 @@
 			text-align: right;
 		}
 		#pagination6{
+			text-align: center;
+		}
+		#pagination7{
 			text-align: center;
 		}
 		#pagination6-text{
@@ -75,7 +79,9 @@ paging({
 });</pre>
 	</div>
 	<br />
-	<div id="pagination1"></div>
+	<div id="pagination1">
+<!--jasd-->
+	</div>
 	<br />
 	<hr />
 	<h3>增加总页数显示 / Add total page</h3>
@@ -143,6 +149,8 @@ paging({
 	<hr />
 	<h3>回调及方法 / Callback and methods</h3>
 	<br />
+    <h4>AJAX分页演示</h4>
+    <br />
 	<div class="clearfix">
 		<pre class="prettyprint">
 var paging6 = paging({
@@ -174,7 +182,9 @@ document.getElementById('pagination6-skip15').onclick = function () {
 };</pre>
 	</div>
 	<br />
-	<p id="pagination6-text"></p>
+	<p id="pagination6-text">
+        <img src="../resource/loading.gif" />
+    </p>
 	<p id="pagination6-methods">
 		<a id="pagination6-prev" href="javascript:;">上一页 / Prev page</a><br />
 		<a id="pagination6-next" href="javascript:;">下一页 / Next page</a><br />
@@ -183,7 +193,32 @@ document.getElementById('pagination6-skip15').onclick = function () {
 	</p>
 	<div id="pagination6"></div>
 	<br />
-	<hr />
+    <br />
+    <h4>页面跳转分页演示</h4>
+    <br />
+    <div class="clearfix">
+		<pre class="prettyprint">
+var paging6 = paging({
+	cont:'pagination6',
+	pages:12,
+	groups:5,
+	curr:6,
+	reset:true,
+	total:true,
+	skip:true,
+	pageChange:function(opts){
+		document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
+	},
+	overPageSkip:function (tpage) {
+		alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
+	}
+};</pre>
+    </div>
+    <br />
+    <div id="pagination7"></div>
+    <br />
+    <br />
+    <hr />
 </div>
 <script>
 	if(document.addEventListener){
@@ -234,33 +269,59 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			last:false,
 			curr:6
 		});
-		var paging6 = paging({
-			cont:'pagination6',
-			pages:12,
-			groups:5,
-			curr:6,
-			reset:true,
-			total:true,
-			skip:true,
-			pageChange:function(tpage){
-				document.getElementById('pagination6-text').innerText = '目标页码为' + tpage + '/' + this.opts.pages + ' - Target page is '+ tpage + '/' + this.opts.pages;
-			},
-			overPageSkip:function (tpage) {
-				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
-			}
-		});
+		//AJAX分页
+        var paging6 = null,stopChange = false;
+		paging6_test();
+		function paging6_test(config) {
+			var pagination6_text = document.getElementById('pagination6-text');
+			pagination6_text.innerHTML = '<img src="../resource/loading.gif" />';
+			config = config || {};
+			var curr = config.curr || 1;
+			setTimeout(function () {
+				pagination6_text.innerHTML = '目标页码为' + curr + ' - Target page is '+ curr;
+				paging6 = paging({
+					cont:'pagination6',
+					pages:12,
+					groups:5,
+					curr:curr,
+					reset:false,
+					total:true,
+					skip:true,
+					pageChange:function(tpage){
+						config.curr = tpage;
+						paging6_test(config);
+					},
+					overPageSkip:function (tpage) {
+						alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
+					}
+				});
+			},1500);
+		}
 		document.getElementById('pagination6-next').onclick = function () {
-			paging6.next();
+			paging6 && paging6.next();
 		};
 		document.getElementById('pagination6-prev').onclick = function () {
-			paging6.prev();
+			paging6 && paging6.prev();
 		};
 		document.getElementById('pagination6-skip3').onclick = function () {
-			paging6.skip(3);
+			paging6 && paging6.skip(3);
 		};
 		document.getElementById('pagination6-skip15').onclick = function () {
-			paging6.skip(15);
+			paging6 && paging6.skip(15);
 		};
+		//跳页分页
+		var pageIndex = location.search.replace(/^.*pageIndex=(\d+).*$/,'$1');
+		paging({
+			cont:'pagination7',
+			pages:12,
+			groups:5,
+			first:1,
+			last:true,
+			curr:pageIndex,
+            pageChange:function (tpage) {
+	            location.href = '?pageIndex='+tpage;
+            }
+		});
 	}
 </script>
 </body>
