@@ -158,6 +158,12 @@ function(tpage){
 		</tbody>
 	</table>
 	<br />
+	<h2>属性/Attr</h2>
+	<pre class="prettyprint">var paging1 = paging();paging1.disabled = true;</pre>
+	<br />
+	<h4>.disabled</h4>
+	<pre class="prettyprint">paging1.disabled = true;// ajax 等待时间过长时可利用disabled属性禁用跳页时间，等待ajax结束设置为false即可 / You can use it when using ajax to forbid page change event .</pre>
+	<br />
 	<h2>方法/Methods</h2>
 	<pre class="prettyprint">var paging1 = paging();paging1.prev();</pre>
 	<br />
@@ -167,7 +173,6 @@ function(tpage){
 	<pre class="prettyprint">paging1.next();// 下一页 / next</pre>
 	<h4>.skip(num);</h4>
 	<pre class="prettyprint">paging1.skip(5);// 跳至第五页 / skip to fifth</pre>
-	<br />
 	<br />
 	<br />
 	<br />
