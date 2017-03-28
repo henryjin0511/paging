@@ -30,25 +30,30 @@ gulp.task('scss',function () {
 	return gulp.src(scssSrc)
 		.pipe(plugins.scssLint({
 			'config': 'scsslint.yml'
-		}))
+		}));
 		.pipe(plugins.sourcemaps.init())
 		.pipe(plugins.sass({outputStyle:'expanded'}).on('error', plugins.sass.logError))
-		.pipe(plugins.autoprefixer({
-			browsers:[
-				'Android 2.3',
-				'Android >= 4',
-				'Chrome >= 20',
-				'Firefox >= 24',
-				'Explorer >= 8',
-				'iOS >= 6',
-				'Opera >= 12',
-				'Safari >= 6'
-			],
-			cascade: true,
-			remove:true
-		}))
 		.pipe(plugins.sourcemaps.write())
+        .pipe(plugins.autoprefixer({
+            browsers:[
+                'Android 2.3',
+                'Android >= 4',
+                'Chrome >= 20',
+                'Firefox >= 24',
+                'Explorer >= 8',
+                'iOS >= 6',
+                'Opera >= 12',
+                'Safari >= 6'
+            ],
+            cascade: true,
+            remove:true
+        }))
 		.pipe(gulp.dest(resSrc));
+});
+gulp.task('testscss',function () {
+	return gulp.src('src/paging.scss')
+        .pipe(plugins.scssLint())
+        .pipe(plugins.scssLint.failReporter());
 });
 gulp.task('css',['scss'],function () {
 	return gulp.src(cssSrc)
@@ -67,7 +72,7 @@ gulp.task('css',['scss'],function () {
 		.pipe(gulp.dest(resDest));
 });
 gulp.task('dev', function() {
-	//gulp.watch(scssSrc,['scss']);
+	gulp.watch(scssSrc,['scss']);
 	gulp.watch(jsSrc,['jshint']);
 });
 gulp.task('deploy-html',function () {

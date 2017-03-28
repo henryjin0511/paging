@@ -10,7 +10,7 @@
 			cont: 'pagination',
 			pages: 1,
 			curr: 1,
-			groups: 5,
+            groups: 5,
 			first: 1,
 			last: true,
 			prev: '&#19978;&#19968;&#39029;',

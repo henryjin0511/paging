@@ -22,7 +22,13 @@ var paging1 = paging({
     groups:5,
     curr:6,
     total:true,
-    skip:true
+    skip:true,
+    pageChange:function (tpage) {
+        location.href = '?pageIndex='+tpage;
+    },
+    overPageSkip:function (tpage) {
+        alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
+    } 
 });
 </script>
 ```
@@ -30,7 +36,6 @@ var paging1 = paging({
 ![demo.png](./src/demo.png)
 
 ## 参数/Options
-
 
 | Name | Type | Default | Description |
 | ---- | ---- | ------- | ----------- |
@@ -66,6 +71,15 @@ paging({
         //console.log(tpage);tpage为目标页码
     }
 });
+```
+
+## 属性 / Attrs
+
+* **`.disabled();`** : 是否禁用插件（主要应用于ajax分页时等待时间过长，可以设置disabled属性为true暂时禁用分页） /  Whether turn off the plugin ( This is always used in ajax to turn off the plugin for the long waiting time . )
+```javascript
+var paging1 = paging(options);
+paging1.disabled = true; //switch on the plugin
+paging1.disabled = false; //switch off the plugin
 ```
 
 ## 方法 / Methods
