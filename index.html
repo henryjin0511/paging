@@ -4,14 +4,13 @@
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging Example</title>
-	<link rel="stylesheet" href="../resource/bootstrap.min.css">
-	<script src="../resource/ajax.js"></script>
+	<link rel="stylesheet" href="./resource/bootstrap.min.css">
 	<!-- paging javascript and css -->
-	<script src="src/paging.js"></script>
-	<link rel="stylesheet" href="src/paging.css" />
+	<script src="./src/paging.js"></script>
+	<link rel="stylesheet" href="./src/paging.css" />
 	<!--[if lt IE 9]>
-	<script src="../resource/html5shiv.min.js"></script>
-	<script src="../resource/respond.min.js"></script>
+	<script src="./resource/html5shiv.min.js"></script>
+	<script src="./resource/respond.min.js"></script>
 	<![endif]-->
 	<style type="text/css">
 		#pagination1{
@@ -160,7 +159,7 @@ var paging6 = null;
 //默认配置
 (function paging6_test(curr) {
 	var pagination6_text = document.getElementById('pagination6-text');
-	pagination6_text.innerHTML = '&lt;img src="../resource/loading.gif" /&gt;';
+	pagination6_text.innerHTML = '&lt;img src="./resource/loading.gif" /&gt;';
 	curr = curr || 1;
 	//ajax...
 	paging6 && (paging6.disabled = true);//防止网速过慢时用户多次请求
@@ -201,7 +200,7 @@ document.getElementById('pagination6-skip15').onclick = function () {
 	</div>
 	<br />
 	<p id="pagination6-text">
-        <img src="../resource/loading.gif" />
+        <img src="./resource/loading.gif" />
     </p>
 	<p id="pagination6-methods">
 		<a id="pagination6-prev" href="javascript:;">上一页 / Prev page</a><br />
@@ -291,7 +290,7 @@ paging({
         //默认配置
 		(function paging6_test(curr) {
 			var pagination6_text = document.getElementById('pagination6-text');
-			pagination6_text.innerHTML = '<img src="../resource/loading.gif" />';
+			pagination6_text.innerHTML = '<img src="./resource/loading.gif" />';
 			curr = curr || 1;
 			//ajax...
 			paging6 && (paging6.disabled = true);//防止网速过慢时用户多次请求
