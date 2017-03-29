@@ -77,7 +77,8 @@ gulp.task('dev', function() {
 });
 gulp.task('deploy-html',function () {
 	return gulp.src('demo/*.html')
-		.pipe(plugins.replace(/\.\.\/src/g,'src'))
+		.pipe(plugins.replace(/\.\.\/src/g,'./src'))
+		.pipe(plugins.replace(/\.\.\/resource/g,'./resource'))
 		.pipe(gulp.dest('gh-pages/'));
 });
 gulp.task('deploy-res',function () {
