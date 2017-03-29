@@ -114,7 +114,7 @@
 	</table>
 	<br />
 	<h2>事件 / Events</h2>
-	<pre class="prettyprint">paging({pageChange:function(opts){},overPageSkip:function(tpage){});</pre>
+	<pre class="prettyprint">paging({pageChange:function(tpage){},overPageSkip:function(tpage){});</pre>
 	<br />
 	<table class="table table-bordered table-striped">
 		<thead>
@@ -129,13 +129,13 @@
 			<td>pageChange</td>
 			<td>
 				<pre>
-function(opts){
+function(tpage){
 	console.log(this);
-	console.log(opts);
+	console.log(tpage);
 }
 			</pre>
-				<p>this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表 (opts === this.opts) </p>
-				<p>Object this is the current paging Object , you can get the options through this.opts . (opts === this.opts) </p>
+				<p>this对象为当前HTMLDivElement,可通过this.opts获取到当前对象参数列表 , tpage 为目标页码 </p>
+				<p>Object this is the current paging Object , you can get the options through this.opts , tpage is the target page number . </p>
 			</td>
 			<td>
 				当参数选项中reset设置为true，第一次构建分页元素就会触发分页事件 <br /> It would emit at the first time of paging init if the reset in options to set as true .
@@ -158,7 +158,16 @@ function(tpage){
 		</tbody>
 	</table>
 	<br />
-	<h2>方法/Methods</h2>
+	<h2>属性 / Attr</h2>
+	<pre class="prettyprint">var paging1 = paging();paging1.disabled = true;</pre>
+	<br />
+	<h4>.disabled</h4>
+	<p>ajax 等待时间过长时可利用disabled属性禁用跳页事件，等待ajax结束设置为false即可 / You can use it when using ajax to forbid page change event .</p>
+	<pre class="prettyprint">
+paging1.disabled = true;  //开启跳页功能 / switch off the plugin
+paging1.disabled = false;  //禁用跳页功能 / switch on the plugin</pre>
+	<br />
+	<h2>方法 / Methods</h2>
 	<pre class="prettyprint">var paging1 = paging();paging1.prev();</pre>
 	<br />
 	<h4>.prev();</h4>
@@ -167,7 +176,6 @@ function(tpage){
 	<pre class="prettyprint">paging1.next();// 下一页 / next</pre>
 	<h4>.skip(num);</h4>
 	<pre class="prettyprint">paging1.skip(5);// 跳至第五页 / skip to fifth</pre>
-	<br />
 	<br />
 	<br />
 	<br />

@@ -5,13 +5,14 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<title>Paging Example</title>
 	<link rel="stylesheet" href="../resource/bootstrap.min.css">
+	<script src="../resource/ajax.js"></script>
 	<!-- paging javascript and css -->
 	<script src="src/paging.js"></script>
 	<link rel="stylesheet" href="src/paging.css" />
 	<!--[if lt IE 9]>
-    <script src="../resource/html5shiv.min.js"></script>
-    <script src="../resource/respond.min.js"></script>
-    <![endif]-->
+	<script src="../resource/html5shiv.min.js"></script>
+	<script src="../resource/respond.min.js"></script>
+	<![endif]-->
 	<style type="text/css">
 		#pagination1{
 			text-align: center;
@@ -25,7 +26,10 @@
 		#pagination6{
 			text-align: center;
 		}
-		#pagination6-text{
+		#pagination7{
+			text-align: center;
+		}
+		#pagination1-text , #pagination6-text{
 			text-align: center;
 			font-size: 16px;
 		}
@@ -64,16 +68,20 @@
 	<br />
 	<div class="clearfix">
 		<pre class="prettyprint">
+var paging1data = [{name:'a',age:10},{name:'b',age:12},{name:'c',age:14},{name:'d',age:14},{name:'e',age:14},{name:'f',age:14},{name:'g',age:14}];
 paging({
-	cont:'pagination1',// id名或者直接传入原生dom对象/ word of div's id or DOM Object
-	pages:12,// 总页数/total pages number
-	groups:5,// 连续分页数/serial pages number
-	curr:1,// 当前页数/current page number
-	pageChange:function(opts){
-		alert(opts.curr);
+	cont:'pagination1',
+	pages:paging1data.length,
+	groups:5,
+	curr:1,
+	reset:true,
+	pageChange:function(tpage){
+		document.getElementById('pagination1-text').innerHTML = JSON.stringify(paging1data[tpage-1]);
 	}
 });</pre>
 	</div>
+	<br />
+	<div id="pagination1-text"></div>
 	<br />
 	<div id="pagination1"></div>
 	<br />
@@ -143,38 +151,58 @@ paging({
 	<hr />
 	<h3>回调及方法 / Callback and methods</h3>
 	<br />
+    <h4>AJAX分页演示</h4>
+    <br />
 	<div class="clearfix">
 		<pre class="prettyprint">
-var paging6 = paging({
-	cont:'pagination6',
-	pages:12,
-	groups:5,
-	curr:6,
-	reset:true,
-	total:true,
-	skip:true,
-	pageChange:function(opts){
-		document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
-	},
-	overPageSkip:function (tpage) {
-		alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
-	}
-});
+//异步分页
+var paging6 = null;
+//默认配置
+(function paging6_test(curr) {
+	var pagination6_text = document.getElementById('pagination6-text');
+	pagination6_text.innerHTML = '&lt;img src="../resource/loading.gif" /&gt;';
+	curr = curr || 1;
+	//ajax...
+	paging6 && (paging6.disabled = true);//防止网速过慢时用户多次请求
+	setTimeout(function () {
+		pagination6_text.innerHTML = '目标页码为' + curr + ' - Target page is '+ curr;
+		var data = {pages:12};
+		//模拟后台返回总页数
+		var pages = data.pages;
+		paging6 = paging({
+			cont:'pagination6',
+			pages:pages,
+			groups:5,
+			curr:curr,
+			total:true,
+			skip:true,
+			pageChange:function(tpage){
+				paging6_test(tpage);
+			},
+			overPageSkip:function (tpage) {
+				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
+			}
+		});
+		paging6.disabled = false; //可不写
+	},1600);
+})();
 document.getElementById('pagination6-next').onclick = function () {
-	paging6.next();
+	paging6 && paging6.next();
 };
 document.getElementById('pagination6-prev').onclick = function () {
-	paging6.prev();
+	paging6 && paging6.prev();
 };
 document.getElementById('pagination6-skip3').onclick = function () {
-	paging6.skip(3);
+	paging6 && paging6.skip(3);
 };
 document.getElementById('pagination6-skip15').onclick = function () {
-	paging6.skip(15);
+	paging6 && paging6.skip(15);
 };</pre>
 	</div>
 	<br />
-	<p id="pagination6-text"></p>
+	<p id="pagination6-text">
+        <img src="../resource/loading.gif" />
+    </p>
 	<p id="pagination6-methods">
 		<a id="pagination6-prev" href="javascript:;">上一页 / Prev page</a><br />
 		<a id="pagination6-next" href="javascript:;">下一页 / Next page</a><br />
@@ -183,7 +211,29 @@ document.getElementById('pagination6-skip15').onclick = function () {
 	</p>
 	<div id="pagination6"></div>
 	<br />
-	<hr />
+    <br />
+    <h4>页面跳转分页演示</h4>
+    <br />
+    <div class="clearfix">
+		<pre class="prettyprint">
+var pageIndex = location.search.replace(/^.*pageIndex=(\d+).*$/,'$1');
+paging({
+	cont:'pagination7',
+	pages:12,
+	groups:5,
+	first:1,
+	last:true,
+	curr:pageIndex,
+    pageChange:function (tpage) {
+        location.href = '?pageIndex='+tpage;
+    }
+});</pre>
+    </div>
+    <br />
+    <div id="pagination7"></div>
+    <br />
+    <br />
+    <hr />
 </div>
 <script>
 	if(document.addEventListener){
@@ -192,13 +242,15 @@ document.getElementById('pagination6-skip15').onclick = function () {
 		window.onload = domCallback;
 	}
 	function domCallback() {
+		var paging1data = [{name:'a',age:10},{name:'b',age:12},{name:'c',age:14},{name:'d',age:14},{name:'e',age:14},{name:'f',age:14},{name:'g',age:14}];
 		paging({
 			cont:'pagination1',
-			pages:12,
+			pages:paging1data.length,
 			groups:5,
 			curr:1,
-			pageChange:function(opts){
-				alert(opts.curr);
+			reset:true,
+			pageChange:function(tpage){
+				document.getElementById('pagination1-text').innerHTML = JSON.stringify(paging1data[tpage-1]);
 			}
 		});
 		paging({
@@ -234,33 +286,62 @@ document.getElementById('pagination6-skip15').onclick = function () {
 			last:false,
 			curr:6
 		});
-		var paging6 = paging({
-			cont:'pagination6',
-			pages:12,
-			groups:5,
-			curr:6,
-			reset:true,
-			total:true,
-			skip:true,
-			pageChange:function(opts){
-				document.getElementById('pagination6-text').innerText = '当前页数为'+opts.curr + ' - Current page is '+opts.curr;
-			},
-			overPageSkip:function (tpage) {
-				alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
-			}
-		});
+		//异步分页
+        var paging6 = null;
+        //默认配置
+		(function paging6_test(curr) {
+			var pagination6_text = document.getElementById('pagination6-text');
+			pagination6_text.innerHTML = '<img src="../resource/loading.gif" />';
+			curr = curr || 1;
+			//ajax...
+			paging6 && (paging6.disabled = true);//防止网速过慢时用户多次请求
+			setTimeout(function () {
+				pagination6_text.innerHTML = '目标页码为' + curr + ' - Target page is '+ curr;
+				var data = {pages:12};
+				//模拟后台返回总页数
+				var pages = data.pages;
+				paging6 = paging({
+					cont:'pagination6',
+					pages:pages,
+					groups:5,
+					curr:curr,
+					total:true,
+					skip:true,
+					pageChange:function(tpage){
+						paging6_test(tpage);
+					},
+					overPageSkip:function (tpage) {
+						alert('最大页数为'+this.opts.pages+'，您选择的是'+tpage+'。\n'+'total page is'+this.opts.pages+', your target is '+tpage+' .');
+					}
+				});
+				paging6.disabled = false; //可不写
+			},1600);
+		})();
 		document.getElementById('pagination6-next').onclick = function () {
-			paging6.next();
+			paging6 && paging6.next();
 		};
 		document.getElementById('pagination6-prev').onclick = function () {
-			paging6.prev();
+			paging6 && paging6.prev();
 		};
 		document.getElementById('pagination6-skip3').onclick = function () {
-			paging6.skip(3);
+			paging6 && paging6.skip(3);
 		};
 		document.getElementById('pagination6-skip15').onclick = function () {
-			paging6.skip(15);
+			paging6 && paging6.skip(15);
 		};
+		//跳页分页
+		var pageIndex = location.search.replace(/^.*pageIndex=(\d+).*$/,'$1');
+		paging({
+			cont:'pagination7',
+			pages:12,
+			groups:5,
+			first:1,
+			last:true,
+			curr:pageIndex,
+            pageChange:function (tpage) {
+	            location.href = '?pageIndex='+tpage;
+            }
+		});
 	}
 </script>
 </body>

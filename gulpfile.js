@@ -30,7 +30,7 @@ gulp.task('scss',function () {
 	return gulp.src(scssSrc)
 		.pipe(plugins.scssLint({
 			'config': 'scsslint.yml'
-		}));
+		}))
 		.pipe(plugins.sourcemaps.init())
 		.pipe(plugins.sass({outputStyle:'expanded'}).on('error', plugins.sass.logError))
 		.pipe(plugins.sourcemaps.write())
@@ -94,7 +94,7 @@ gulp.task('release',['css','js'],function() {
 		.pipe(gulp.dest(releasePath));
 });
 gulp.task('build',['css','js','release']);
-gulp.task('deploy',['deploy-html','deploy-res','deploy-rely'],function () {
+gulp.task('deploy',['deploy-html','deploy-res','deploy-resource'],function () {
 	return gulp.src('./gh-pages/**/*')
 		.pipe(plugins.ghPages());
 });

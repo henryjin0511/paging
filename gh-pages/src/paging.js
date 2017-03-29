@@ -10,19 +10,19 @@
 			cont: 'pagination',
 			pages: 1,
 			curr: 1,
-			groups: 5,
+            groups: 5,
 			first: 1,
 			last: true,
 			prev: '&#19978;&#19968;&#39029;',
 			next: '&#19979;&#19968;&#39029;',
 			total: false,
-			skip: false,
 			reset: false,
-			pageChange: function (opts) {},
-			overPageSkip:function (tpage) {}
+			skip: false,
+			pageChange: null,
+			overPageSkip:null
 		};
 		this.opts = Paging.deepCopy(defaultOpts, options);
-		this.opts.item = index++; //单页面多次调用分ID
+		this.order = index++;
 		this.init(this.opts.reset);
 	}
 	//静态方法 - 深度拷贝
@@ -52,30 +52,26 @@
 	//共有方法 - 初始化
 	Paging.prototype.init = function (reset) {
 	    var _this = this,opts = _this.opts;
-	    if(typeof reset !== 'undefined'){
+	    if(_this.disabled === true)return false;
+	    if(typeof _this.oPaging === 'undefined'){
 		    _this.createDom();
-		    _this.bindEvents(document.getElementById('paging' + opts.item));
+		    _this.bindEvents(_this.oPaging);
 	    }
 		_this.render();
-		if((typeof reset === 'undefined' || reset === true) && opts.pageChange){
-			opts.pageChange.call(_this,_this.opts);
-		}
+		(typeof reset === 'undefined' || reset === true) && opts.pageChange && opts.pageChange.call(_this,_this.opts.curr);
 	};
 	//共有方法 - 创建div
 	Paging.prototype.createDom = function () {
 		var _this = this , opts = _this.opts;
-		var htmlStr = '<div class="paging-box" id="paging'+opts.item+'"></div>';
-		if(typeof opts.cont === 'object'){
-			opts.cont.innerHTML = htmlStr;
-		}else{
-			document.getElementById(opts.cont).innerHTML = htmlStr;
-		}
-		_this.oDiv = document.getElementById('paging'+opts.item);
+		var oDiv = typeof opts.cont === 'object' ?opts.cont : document.getElementById(opts.cont);
+		oDiv.innerHTML = '';
+		_this.oPaging = document.createElement('div');
+		_this.oPaging.className = 'paging-box';
+		oDiv.appendChild(_this.oPaging);
 	};
 	//共有方法 - 渲染分页dom
 	Paging.prototype.render = function () {
 		var _this = this,
-			htmlStr = '',
 			opts = _this.opts,
 			view = [],
 			sign = {},
@@ -127,16 +123,14 @@
 		if (skip) {
 			view.push('<div class="paging-skip"><span>&#x5230;&#x7B2C;</span><input type="number" min="1" value="' + curr + '" onkeyup="this.value=this.value.replace(/\\D/, \'\');"><span>&#x9875;</span><button type="button" class="paging-btn">&#x786e;&#x5b9a;</button></div>');
 		}
-		_this.oDiv.innerHTML = view.join('');
+		_this.oPaging.innerHTML = view.join('');
 	};
 	//共有方法 - 事件绑定
 	Paging.prototype.bindEvents = function (oPaging) {
 		if (!oPaging) return;
 		var _this = this, opts = _this.opts, oInput = null;
 		Paging.on(oPaging,'click',function(e){
-			var curObj = Paging.getTarget(e);
-			var tpage = 0;
-			var ableSkip = true;
+			var curObj = Paging.getTarget(e),tpage = 0,ableSkip = true;
 			if(curObj.nodeName.toLowerCase() === 'a'){  //分页按钮
 				tpage = curObj.getAttribute('data-page') | 0;
 				if(tpage <= 0){
@@ -162,15 +156,21 @@
 	};
 	//共有方法 - 跳页
 	Paging.prototype.skip = function (tpage) {
-		var _this = this,opts = _this.opts,skip = true;
-		if(isNaN(tpage) || tpage > opts.pages){
-			skip = opts.overPageSkip.call(_this,tpage);
-		}
-		if(!skip){
-			return false;
-		}
-        opts.curr = tpage;
-        _this.init();
+	    if(isNaN(tpage)) throw new Error('Arguments[0] should be a Number');
+		var _this = this,opts = _this.opts;
+        tpage = tpage | 0;
+		if(tpage <= opts.pages){
+			if(tpage === opts.curr)return false;
+            opts.curr = tpage;
+            _this.init();
+		}else{
+		    if(opts.overPageSkip){
+                opts.overPageSkip.call(_this,tpage);
+            }else{
+                opts.curr = opts.pages;
+                _this.init();
+            }
+        }
 	};
 	//共有方法 - 前一页
 	Paging.prototype.prev = function () {
